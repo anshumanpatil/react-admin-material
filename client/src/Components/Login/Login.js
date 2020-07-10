@@ -1,70 +1,108 @@
-import { HotKeys } from 'react-hotkeys';
+import React, { useState } from 'react';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import Link from '@material-ui/core/Link';
+import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
 
-import React, { PureComponent, Component } from 'react';
-import { configure } from 'react-hotkeys';
+import Copyright from "../Copyright/Copyright";
+import { LoginStyles } from "../../Styles/Login";
 
 
-const COLORS = ['green', 'purple', 'orange', 'grey', 'pink'];
+export default function Login(props) {
+  const {history} = props;
+  const classes = LoginStyles();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-const ACTION_KEY_MAP = {
-  KEY: 'Control+s',
-};
-
-class Login extends Component {
-  constructor(props, context) {
-    super(props, context);
-
-    this.changeColor = this.changeColor.bind(this);
-    configure({
-      ignoreTags: ['div']
-    });
-  
-    this.state = {
-      colorNumber: 0
-    };
+  const setUsernameValue = (e) => {
+    setUsername(e.target.value);
   }
 
-  changeColor(e) {
-    e.preventDefault();
-    this.setState(({ colorNumber }) => ({ colorNumber: colorNumber === COLORS.length - 1 ? 0 : colorNumber + 1 }));
+  const setPasswordValue = (e) => {
+    setPassword(e.target.value);
   }
 
-  KeyDown(e){
-    if(e.ctrlKey) e.preventDefault();
+  const SubmitLogin = (e) => {
+    if(username=='anshumanpradippatil1506@gmail.com' && password=='1506'){
+      localStorage.setItem('loggedIn', true);
+      history.push('/dashboard');
+    }
   }
-  render() {
-    const handlers = {
-      KEY: this.changeColor
-    };
 
-    const { colorNumber } = this.state;
-    const style = {
-      width: 200,
-      height: 60,
-      left: 20,
-      top: 20,
-      opacity: 1,
-      background: COLORS[colorNumber],
-    };
-
-    return (
-
-      <HotKeys
-        keyMap={ACTION_KEY_MAP}
-        handlers={handlers}        
-      >
-          <textarea 
-            style={style}
-            className="node"
-            tabIndex="0"
-            onKeyDown={this.KeyDown}
-          ></textarea>
-       
-      </HotKeys>
-
-
-    );
-  }
+  return (
+    <Container component="main" maxWidth="xs">
+      <CssBaseline />
+      <div className={classes.paper}>
+        <Avatar className={classes.avatar}>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Sign in
+        </Typography>
+        {/* <form className={classes.form} noValidate> */}
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            onChange={setUsernameValue}
+            autoFocus
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+            onChange={setPasswordValue}
+          />
+          {/* <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />}
+            label="Remember me"
+          /> */}
+          <Button
+            type="button"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={SubmitLogin}
+          >
+            Sign In
+          </Button>
+          <Grid container>
+            <Grid item xs>
+              <Link href="#" variant="body2">
+                Forgot password?
+              </Link>
+            </Grid>
+            <Grid item>
+              <Link href="#" variant="body2">
+                {"Don't have an account? Sign Up"}
+              </Link>
+            </Grid>
+          </Grid>
+        {/* </form> */}
+      </div>
+      <Box mt={8}>
+        <Copyright text="Site Name" url="www.anshumanpatil.com" />
+      </Box>
+    </Container>
+  );
 }
-
-export default Login;
